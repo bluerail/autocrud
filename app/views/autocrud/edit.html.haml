@@ -1,0 +1,14 @@
+%h2= t(@i18n_prefix+".edit", :item => @item.to_s)
+
+= form_for(@item, :url => { :action => 'update', :id => @item }, :html => { :multipart => true }) do |f|
+  = crud_form_error_messages(f)
+  = render_crud_view :partial => "autocrud/form", :locals => { :columns => @edit_columns, :f => f, :item => @item }
+  .action_links
+    - if @edit_options.include?(:append_action) && @edit_options[:append_action].is_a?(Array)
+      - @edit_options[:append_action].each do |generic_action|
+        = send(@singular.underscore+"_action_"+generic_action.to_s, @item)
+    - elsif @edit_options.include?(:append_action)
+      = send(@singular.underscore+"_action_"+@edit_options[:append_action].to_s, @item)
+
+    = submit_tag t("save")
+    = link_to t('show_action', :item => @item.to_s), { :action => 'show', :id => @item }, :id => 'show_link'

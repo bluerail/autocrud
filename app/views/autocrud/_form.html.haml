@@ -1,0 +1,9 @@
+%dl
+  - columns.sort.each do |key, column|
+    %dt= f.label column[:name], t('activerecord.attributes.' + @i18n_prefix.downcase + '.' + attribute_name(column)) + ":"
+    %dd
+      = render_crud_form_field column, @item, { :f => f, :key => key, :params => column[:params] }
+
+      - if @column_descriptions.include?(column[:name])
+        .description
+          = image_tag '../crud/images/help.png', :style => 'cursor: pointer;', :title => @column_descriptions[column[:name]]

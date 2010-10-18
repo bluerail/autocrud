@@ -1,0 +1,18 @@
+%h2= param(@list_options,:page_title,t(@i18n_prefix+'.listing'))
+
+- if @object_description && @object_description != "" 
+  %p.object_description= @object_description
+
+#list
+  = render_crud_view :partial => "autocrud/list", :locals => {:params => params, :page => @page, :num_of_pages => @num_of_pages, :items => @items, :list_options => @list_options, :list_columns => @list_columns }
+
+.action_links
+  - if display_link_to?(:new)
+    = crud_link_to t(@i18n_prefix+'.new'), { :action => 'new' }
+
+  - if @list_options.include?(:append_generic_action) && @list_options[:append_generic_action].is_a?(Array) 
+    - @list_options[:append_generic_action].each do |generic_action|
+      = send(@singular.underscore+"_generic_action_"+generic_action.to_s)
+
+  - elsif @list_options.include?(:append_generic_action)
+    = send(@singular.underscore+"_generic_action_"+@list_options[:append_generic_action].to_s)

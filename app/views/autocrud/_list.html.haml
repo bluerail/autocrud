@@ -1,0 +1,62 @@
+:ruby
+  # Assume results are not paginated of no page data is given
+  if !defined?(page) && !defined?(num_of_pages)
+    page = 1
+    num_of_pages = 1
+  end
+
+%table
+  %thead
+    %tr
+      - if display_link_to?(:show)
+        %th{ :class => 'action' }
+
+      - if list_options.include?(:append_action) && list_options[:append_action].is_a?(Array)
+        - list_options[:append_action].each do |generic_action|
+          %th{ :class => 'action' }
+      - elsif list_options.include?(:append_action)
+        %th 
+
+      - list_columns.sort.each do |key, column|
+        - if !column.include?(:sortable) || column[:sortable].to_s != "false"
+          %th{ :class => "sortable" + (column.include?(:sort) && column[:sort].include?(:dir) ? " sort#{ column[:sort][:dir] }" : "") }
+            = link_to t('activerecord.attributes.' + @i18n_prefix.downcase + '.' + attribute_name(column)), url_for(params.merge({ :action => 'index', :page => page, :sort => column[:name], :dir => (column.include?(:sort) && column[:sort][:dir] == 'asc' ? 'desc' : 'asc') }))
+  
+        - else
+          %th{ :class => (column.include?(:sort) && column[:sort].include?(:dir) ? "sort#{ column[:sort][:dir] }" : "") }
+            = t('activerecord.attributes.' + @i18n_prefix.downcase + '.' + attribute_name(column))
+  %tbody
+    - items.each do |item|
+      %tr{ :id => "#{item.class.to_s.underscore}_#{item.id}" }
+        - if display_link_to?(:show)
+          %td{ :class => 'action' }
+            = link_to(image_tag('../autocrud/images/magnifier.png', :title => t('show_action')), { :action => 'show', :id => item })
+
+        - if list_options.include?(:append_action) && list_options[:append_action].is_a?(Array)
+          - list_options[:append_action].each do |generic_action|
+            %td{ :class => 'action' }
+              = send(@singular.underscore+"_action_"+generic_action.to_s, item)
+
+        - elsif list_options.include?(:append_action)
+          %td{ :class => 'action' }
+            = send(@singular.underscore+"_action_"+list_options[:append_action].to_s, item)
+
+        - list_columns.sort.each do |key, column|
+          %td{ :class => "list_#{@i18n_prefix.to_s}_#{column[:name]}" }
+            = attribute_list_value column.merge({:item => item})
+
+- if num_of_pages && num_of_pages > 1
+  %p.list_pagination
+    - unless page < 7
+      = link_to t('page.first'), params.merge({ :action => 'index', :page => 1 })
+    
+    - ([1, page-5].max..[num_of_pages, page+5].min).each do |p|
+      - if p == page
+        %span= p
+      - elsif p < page
+        = link_to p.to_s, params.merge({ :action => 'index', :page => p })
+      - else 
+        = link_to p.to_s, params.merge({ :action => 'index', :page => p })
+    
+    - unless page > num_of_pages - 6
+      = link_to t('page.last'), params.merge({ :action => 'index', :page => num_of_pages })

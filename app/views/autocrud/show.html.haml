@@ -1,0 +1,19 @@
+%h2= t(@i18n_prefix+".show", :item => @item.to_s)
+
+= render_crud_view :partial => "autocrud/details", :locals => { :show_columns => @edit_columns, :item => @item }
+
+.action_links
+  - if @show_options.include?(:append_action) && @show_options[:append_action].is_a?(Array)
+    - @show_options[:append_action].each do |generic_action|
+      = send(@singular.underscore+"_action_"+generic_action.to_s, @item)
+  - elsif @show_options.include?(:append_action)
+    = send(@singular.underscore+"_action_"+@show_options[:append_action].to_s, @item)
+
+  - if display_link_to?(:list)
+    = link_to(t('list_action'), { :action => 'index' }, :id => 'list_link')
+
+  - if display_link_to?(:edit)
+    = link_to(t('edit_action'), { :action => 'edit', :id => @item }, :id => 'edit_link')
+
+  - if display_link_to?(:destroy)
+    = link_to t('destroy_action'), { :action => 'destroy', :id => @item }, :id => 'delete_link', :method => 'delete', :confirm => t(@i18n_prefix+".destroy_verify", :item => @item)

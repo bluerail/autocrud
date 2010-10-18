@@ -1,0 +1,4 @@
+%dl
+  - @show_columns.sort.each do |key, column|
+    %dt= (t 'activerecord.attributes.' + @i18n_prefix.downcase + '.' + attribute_name(column)) + ":"
+    %dd= attribute_show_value(column.merge({:item => @item})).to_s

@@ -1,0 +1,89 @@
+= Autocrud
+
+A Rails plugin to automate your CRUD controllers.
+
+The base of this plugin consists of two basic principals.
+
+First: If we're going to make an application, it's going to be custom. I simply don't like losing control about my own product and I've never been able to put an entire product in the same box as an other one. This plugin therefor simply offers a set of tools you can use if you like it on places where you like it and it should preform the way you'd like it to do.
+
+Second: Every application consists of generic lists with CRUD options and some application specific part. This plugin is mainly meant to help you with the first.
+
+= Installation
+
+Install required assets using rake task:
+
+	rake autocrud:install
+
+= Updating
+
+When possible, the installation will create symlinks in your public folder to the assets of the plugin. When you update your plugin, you're public is automaticly up-to-date.
+
+If the install procedure wasn't able to create symlinks, all files are copied to public/crud. You'll need to run the install again after an update.
+
+= Usage
+
+When you want a controller to acts as a simple CRUD, append the following:
+
+	acts_as_autocrud
+	
+	def autocrud_options
+	end
+
+This will initialize the plugin for this controller, allowing you to customize it using the autocrud_options. For this to work you'll need a layout 'application' or specified using 'use_layout' in 'autocrudoptions'. Make sure you're layout contains 'init_autocrud' to load appropiate javascript and css files. Since we depend on YUI, give your body the class 'yui-skin-sam'. An example:
+
+	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+	<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="nl" lang="nl">
+		<head>
+			<title>My Application</title>
+			<title><%= t('application.title', :current_action => t('application.actions.' + controller.class.to_s.underscore.gsub(/\//,".") + "." + params[:action])) %></title>
+			<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+			<%= javascript_include_tag 'prototype' %>
+			<%= init_autocrud %>
+			<%= stylesheet_link_tag '../crud/stylesheets/example' %>
+		</head>
+		<body class="yui-skin-sam">
+			<h1><%= t('application.title', :current_action => content_tag('span', t('application.actions.' + controller.class.to_s.underscore.gsub(/\//,".") + "." + params[:action]))) %></h1>
+			<div class="container">
+			  <div class="content">
+					<%= yield %>
+				</div>
+				<div class="sidebar">
+					<h3>Profile</h3>
+					<p>Logged in as <%= h session[:user].name %></p>
+					<p><%= link_to 'Sign off', '/session/end' %>
+				</div>
+			</div>
+		</body>
+	</html>
+
+Please note that Autocrud users mass assignments to update your models. Be sure to use attr_accessible and/or attr_protected where appropriate to prevent security issues with your application.
+
+= Customization
+
+= Additional plugins
+
+Some column types require additional plugins to be installed. They are described here.
+
+== CKEditor
+
+CKEditor is a text editor to be used inside web pages. It's a WYSIWYG editor, which means that the text being edited on it looks as similar as possible to the results users have when publishing it. It brings to the web common editing features found on desktop editing applications like Microsoft Word and OpenOffice.
+
+When using the column type 'ckeditor' make sure you have the appropiate javascript and css files loaded.
+
+Download CKEditor from: http://ckeditor.com/
+
+== Paperclip
+
+Paperclip is a file attachment plugin for Ruby on Rails’ Active Record classes which turns files into attributes that work the same way as normal database fields.
+
+Download Paperclip from: http://thoughtbot.com/community/
+
+== LocalizedCountrySelect (type: country_select)
+
+Rails plugin to provide support for localized <select> menu with country names and for storing country information as country code (eg. ‘es’), not name (eg. ‘Spain’), in the database.
+
+Download LocalizedCountrySelect from: http://github.com/karmi/localized_country_select
+
+== Copyright
+
+(c) 2010 LICO Innovations
