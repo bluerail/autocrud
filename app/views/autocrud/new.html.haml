@@ -2,7 +2,7 @@
 
 = form_for(@item, :url => url_for(:action => 'create'), :html => { :multipart => true }) do |f|
   = crud_form_error_messages(f)
-  = render_crud_view :partial => "autocrud/form", :locals => { :columns => @create_columns, :f => f, :item => @item }
+  = render_crud_view :partial => "form", :locals => { :columns => @create_columns, :f => f, :item => @item }
   .action_links
     = submit_tag t("save")
     

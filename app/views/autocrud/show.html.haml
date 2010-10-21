@@ -1,6 +1,6 @@
 %h2= t(@i18n_prefix+".show", :item => @item.to_s)
 
-= render_crud_view :partial => "autocrud/details", :locals => { :show_columns => @edit_columns, :item => @item }
+= render_crud_view :partial => "details", :locals => { :show_columns => @edit_columns, :item => @item }
 
 .action_links
   - if @show_options.include?(:append_action) && @show_options[:append_action].is_a?(Array)

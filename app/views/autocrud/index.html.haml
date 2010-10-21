@@ -4,7 +4,7 @@
   %p.object_description= @object_description
 
 #list
-  = render_crud_view :partial => "autocrud/list", :locals => {:params => params, :page => @page, :num_of_pages => @num_of_pages, :items => @items, :list_options => @list_options, :list_columns => @list_columns }
+  = render_crud_view :partial => "list", :locals => {:params => params, :page => @page, :num_of_pages => @num_of_pages, :items => @items, :list_options => @list_options, :list_columns => @list_columns }
 
 .action_links
   - if display_link_to?(:new)

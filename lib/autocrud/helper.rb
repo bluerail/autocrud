@@ -202,7 +202,7 @@ module Autocrud
         if column && item
           type = param(params,:type,(item.attributes.include?(column.to_s) ? item.column_for_attribute(column).type : "other").to_s).to_s
           value = case type
-            when 'boolean' then item.send(attribute_name(params)) ? image_tag("/autocrud/images/tick.png", :alt => t('true'), :title => t('true')) : image_tag("/autocrud/images/cross.png", :alt => t('false'), :title => t('false'))
+            when 'boolean' then item.send(attribute_name(params)) ? image_tag("/crud/images/tick.png", :alt => t('true'), :title => t('true')) : image_tag("/crud/images/cross.png", :alt => t('false'), :title => t('false'))
             when 'custom' then send(@singular.underscore+"_"+column.to_s+"_list_value".to_s, item)
             when 'date' then item.send(attribute_name(params)) ? item.send(attribute_name(params)).strftime("%d-%m-%Y") : ""
             when 'datetime' then item.send(attribute_name(params)) ? l(item.send(attribute_name(params))) : ""
@@ -489,124 +489,75 @@ module Autocrud
       # 3) lico_aud_crud view paths
       # 4) built-in render method
       #
-      # @see http://api.rubyonrails.org/classes/ActionController/Base.html#M000658
-      #
-      def render_crud_view(options = nil, extra_options = {}, &block)
+      def render_crud_view(options = nil, locals = {}, &block)
         c = case self.class.to_s
           when "ActionView::Base" then controller
           else self
         end
-
+        
         #
         # Try view paths of controller
         #
-        c.view_paths.each do |path|
-          data = render_crud_view_in(File.join(path.to_s, c.controller_path), options, extra_options, &block)
-          return data if data
+        c.view_paths.each do |view_path|
+          crud_views_in(File.join(view_path, c.controller_path), options).each do |view|
+            return render_crud_view_in(view, options, locals, &block)
+          end
         end
         
         #
         # Try custom view paths
         #
-        @custom_view_paths.each do |path|
-          data = render_crud_view_in(path, options, extra_options, &block)
-          return data if data
-        end
-
-        #
-        # Try plugin built in (lib/crud_views) view path
-        #
-        data = render_crud_view_in(@view_path, options, extra_options, &block)
-        return data if data
-
-        #
-        # Rescue using Rails's built in render method
-        #
-        return render(options, extra_options, &block)
-      end
-      
-      def render_crud_view_to_string(options = nil, &block)
-        c = case self.class.to_s
-          when "ActionView::Base" then controller
-          else self
-        end
-
-        #
-        # Try view paths of controller
-        #
-        c.view_paths.each do |path|
-          data = render_crud_view_to_string_in(File.join(path.to_s, c.controller_path), options, &block)
-          return data if data
+        @custom_view_paths.each do |view_path|
+          crud_views_in(File.join(view_path, c.controller_path), options).each do |view|
+            return render_crud_view_in(view, options, locals, &block)
+          end
         end
         
         #
-        # Try custom view paths
+        # Try plugin built in (app/views/autocrud) view path
         #
-        @custom_view_paths.each do |path|
-          data = render_crud_view_to_string_in(path, options, &block)
-          return data if data
+        crud_views_in(@view_path, options).each do |view|
+          return render_crud_view_in(view, options, locals, &block)
         end
-
-        #
-        # Try plugin built in (lib/crud_views) view path
-        #
-        data = render_crud_view_to_string_in(@view_path, options, &block)
-        return data if data
-
+        
         #
         # Rescue using Rails's built in render method
         #
-        return render_to_string(options, &block)
+        return render(options, locals, &block)
       end
       
-      def render_crud_view_in(path, options = nil, extra_options = {}, &block)
-        if options && options.kind_of?(Hash) && options.include?(:partial)
-          if /\// =~ options[:partial]
-            if Dir[File.join(path, options[:partial].gsub(/\/([^\/]*)/,"/_\\1")+".html.*")].length > 0
-              options[:partial] = File.join(path, options[:partial]+".html.erb")
-              return render(options, extra_options, &block)
-            end
+      def crud_views_in(view_path, options)
+        case options
+        when Hash
+          if options.key?(:partial)
+            partial_name = /\// =~ options[:partial] ? options[:partial].gsub(/\/([^\/]*)/,"/_\\1") : "_" + options[:partial]
+            Dir[File.join(view_path, partial_name) + ".*"]
           else
-            if Dir[File.join(path, "_" + options[:partial]+".html.*")].length > 0
-              if /.haml/ =~ Dir[File.join(path, "_" + options[:partial]+".html.*")][0]
-                options[:partial] = File.join(path, options[:partial]+".html.haml")
-              else
-                options[:partial] = File.join(path, options[:partial]+".html.erb")
-              end
-              return render(options, extra_options, &block)
-            end
+            [] # unsupported
           end
-        elsif options && options.kind_of?(String)
-          if Dir[File.join(path, options+".html.erb")].length > 0
-            return render(File.join(path, options+".html.erb"), extra_options, &block)
-          elsif Dir[File.join(path, options+".html.haml")].length > 0
-            return render(File.join(path, options+".html.haml"), extra_options, &block)                        
-          end
+        when String
+          Dir[File.join(view_path, options) + ".*"]
+        else
+          [] # unsupported
         end
-        false
-      end 
-
-      def render_crud_view_to_string_in(path, options = nil, &block)
-        if options && options.kind_of?(Hash) && options.include?(:partial)
-          if /\// =~ options[:partial]
-            if Dir[File.join(path, options[:partial].gsub(/\/([^\/]*)/,"/_\\1")+".html.*")].length > 0
-              options[:partial] = File.join(path, options[:partial]+".html.erb")
-              return render_to_string(options, &block)
-            end
+      end
+      
+      def render_crud_view_in(view, options, locals, &block)
+        case options
+        when Hash
+          if options.key?(:partial)
+            options.delete(:partial)
+            options[:file] = view
+            return render(options, locals, &block)
           else
-            if Dir[File.join(path, "_" + options[:partial]+".html.*")].length > 0
-              options[:partial] = File.join(path, options[:partial]+".html.erb")
-              return render_to_string(options, &block)
-            end
+            [] # unsupported
           end
-        elsif options && options.kind_of?(String)
-          if Dir[File.join(path, options+".html.*")].length > 0
-            return render_to_string(File.join(path, options+".html.erb"), &block)
-          end
+        when String
+          return render(view, locals, &block)
+        else
+          [] # unsupported
         end
-        false
-      end 
-              
+      end
     end
   end
 end

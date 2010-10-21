@@ -2,7 +2,7 @@
 
 = form_for(@item, :url => { :action => 'update', :id => @item }, :html => { :multipart => true }) do |f|
   = crud_form_error_messages(f)
-  = render_crud_view :partial => "autocrud/form", :locals => { :columns => @edit_columns, :f => f, :item => @item }
+  = render_crud_view :partial => "form", :locals => { :columns => @edit_columns, :f => f, :item => @item }
   .action_links
     - if @edit_options.include?(:append_action) && @edit_options[:append_action].is_a?(Array)
       - @edit_options[:append_action].each do |generic_action|
