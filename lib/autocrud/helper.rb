@@ -416,7 +416,7 @@ module Autocrud
           when :other_record then
             find_class = column.include?(:find_class) ? column[:find_class] : attribute_class(column)
             find_conditions = column[:ajax_select_conditions]
-            find_items = find_class.find(:all, :select => param(column, :ajax_select, nil), :joins => param(column, :ajax_select_joins, []), :include => param(column, :ajax_select_include, []), :limit => 5, :conditions => conditions).collect do |element| 
+            find_items = find_class.find(:all, :select => param(column, :ajax_select, nil), :joins => param(column, :ajax_select_joins, []), :include => param(column, :ajax_select_include, []), :limit => 5, :conditions => find_conditions).collect do |element| 
               [ element.to_s, element.id ]
             end
             locals[:f].select("#{column[:name].to_s}_id", find_items, { :include_blank => true }.merge(param(column, :options, {})))
