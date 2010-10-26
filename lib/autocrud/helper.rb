@@ -202,7 +202,7 @@ module Autocrud
         if column && item
           type = param(params,:type,(item.attributes.include?(column.to_s) ? item.column_for_attribute(column).type : "other").to_s).to_s
           value = case type
-            when 'boolean' then item.send(attribute_name(params)) ? image_tag("/crud/images/tick.png", :alt => t('true'), :title => t('true')) : image_tag("/crud/images/cross.png", :alt => t('false'), :title => t('false'))
+            when 'boolean' then item.send(attribute_name(params)) ? image_tag("/autocrud/images/tick.png", :alt => t('true'), :title => t('true')) : image_tag("/autocrud/images/cross.png", :alt => t('false'), :title => t('false'))
             when 'custom' then send(@singular.underscore+"_"+column.to_s+"_list_value".to_s, item)
             when 'date' then item.send(attribute_name(params)) ? item.send(attribute_name(params)).strftime("%d-%m-%Y") : ""
             when 'datetime' then item.send(attribute_name(params)) ? l(item.send(attribute_name(params))) : ""
