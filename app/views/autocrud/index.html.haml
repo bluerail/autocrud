@@ -3,7 +3,18 @@
 - if @object_description && @object_description != "" 
   %p.object_description= @object_description
 
-#list
+#list_search
+  %form{ :name => 'autocrud_search', :id => 'autocrud_search', :method => 'get' }
+    = tag("input", :type => 'hidden', :name => 'scope', :id => 'scope', :value => params[:scope])
+    = tag("input", :type => 'hidden', :name => 'page', :id => 'page', :value => params[:page])
+    - params.collect{ |param| param unless ['action', 'controller'].include?(param[0]) }.compact.each do |key, value|
+      = tag("input", :type => 'hidden', :name => key, :value => value)
+
+    #find= image_tag('../autocrud/images/find.png')
+    
+    = text_field_tag "query", {}, :value => params[:query]
+
+#list.autocrud
   = render_crud_view :partial => "list", :locals => {:params => params, :page => @page, :num_of_pages => @num_of_pages, :items => @items, :list_options => @list_options, :list_columns => @list_columns }
 
 .action_links

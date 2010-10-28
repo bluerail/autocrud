@@ -1,0 +1,87 @@
+#list table {
+	border-collapse: collapse;
+	width: 100%;
+}
+#list table td, #list table th {
+	padding: 3px;
+	padding-right: 2em;
+	border-top: 1px solid #CCC;
+	border-bottom: 1px solid #CCC;
+}
+#list table td:last-child, #list table th:last-child {
+	padding-right: 3px;
+}
+#list tbody a {
+	color: black;
+}
+#list thead th {
+	background-color: #F0F0F0;
+	border-right: 1px solid #CCC;
+	font-weight: normal;
+	text-align: left;
+}
+#list thead th:last-child {
+	border-right: 0px;
+}
+#list thead, #list thead a {
+	color: #808080;
+}
+#list .icon {
+	text-align: center;
+	vertical-align: middle;
+}
+#list .icon img {
+	position: relative;
+	top: 2px;
+}
+
+#list_search {
+/*	background-color: #F0F0F0;*/
+	color: #808080;
+	text-align: right;
+}
+#list_search form {
+	margin-left: auto;
+	width: 190px;
+	margin-bottom: 0px;
+	white-space: nowrap;
+}
+#list_search input {
+	background-color: white;
+	color: #808080;
+	border: 1px solid #A0A0A0;
+	height: 16px;
+	margin-left: 5px;
+	margin-right: 5px;
+	width: 160px;
+}
+#list_search #find {
+	width: 16px;
+	float: left;
+}
+#list_search #spinner {
+	width: 16px;
+	float: left;
+}
+#list_search #spinner img, #list_search #find img {
+	position: relative;
+	top: 2px;
+}
+
+#list th.sortable {
+	cursor: pointer;
+}
+#list th.sortasc {
+	background-image: url(../images/sort_asc.png);
+	background-position: right center;
+	background-repeat: no-repeat;
+}
+#list th.sortdesc {
+	background-image: url(../images/sort_desc.png);
+	background-position: right center;
+	background-repeat: no-repeat;
+}
+#list td.action, #list th.action {
+	padding: 0px;
+	width: 16px;
+}
