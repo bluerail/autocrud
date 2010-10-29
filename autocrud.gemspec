@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["LICO Innovations"]
-  s.date = %q{2010-10-14}
+  s.date = %q{2010-10-29}
   s.description = %q{Rails plugin for the automation of CRUD tasks}
   s.email = %q{info@lico.nl}
   s.extra_rdoc_files = [
@@ -306,20 +306,7 @@ Gem::Specification.new do |s|
      "assets/images/sprite.png",
      "assets/images/tick.png",
      "assets/images/title.jpg",
-     "assets/javascripts/01_yahoo-dom-event.js",
-     "assets/javascripts/02_element-min.js",
-     "assets/javascripts/03_button-min.js",
-     "assets/javascripts/04_container-min.js",
-     "assets/javascripts/05_calendar-min.js",
-     "assets/javascripts/06_tabview-min.js",
-     "assets/javascripts/autocrud.js",
-     "assets/stylesheets/ckdata.css",
-     "assets/stylesheets/ckeditor.css",
-     "assets/stylesheets/crud.css",
-     "assets/stylesheets/example.css",
-     "assets/stylesheets/reset.css",
-     "assets/stylesheets/scaffold.css",
-     "assets/stylesheets/yui.css",
+     "assets/stylesheets/autocrud.css",
      "autocrud.gemspec",
      "lib/autocrud.rb",
      "lib/autocrud/controller.rb",
