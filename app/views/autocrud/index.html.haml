@@ -7,7 +7,7 @@
   %form{ :name => 'autocrud_search', :id => 'autocrud_search', :method => 'get' }
     = tag("input", :type => 'hidden', :name => 'scope', :id => 'scope', :value => params[:scope])
     = tag("input", :type => 'hidden', :name => 'page', :id => 'page', :value => params[:page])
-    - params.collect{ |param| param unless ['action', 'controller'].include?(param[0]) }.compact.each do |key, value|
+    - params.collect{ |param| param unless ['action', 'controller', 'query'].include?(param[0]) }.compact.each do |key, value|
       = tag("input", :type => 'hidden', :name => key, :value => value)
 
     #find= image_tag('../autocrud/images/find.png')
