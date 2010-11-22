@@ -206,6 +206,7 @@ module Autocrud
             when 'boolean' then item.send(attribute_name(params)) ? image_tag("/autocrud/images/tick.png", :alt => t('true'), :title => t('true')) : image_tag("/autocrud/images/cross.png", :alt => t('false'), :title => t('false'))
             when 'custom' then send(@singular.underscore+"_"+column.to_s+"_list_value".to_s, item)
             when 'date' then item.send(attribute_name(params)) ? item.send(attribute_name(params)).strftime("%d-%m-%Y") : ""
+            when 'time' then item.send(attribute_name(params)) ? item.send(attribute_name(params)).strftime("%H:%M") : ""
             when 'datetime' then item.send(attribute_name(params)) ? l(item.send(attribute_name(params))) : ""
             when 'paperclip' then item.send(column.to_s+'?') ? image_tag(item.send(column.to_s, param(params, :size))) : ""
             when 'currency' then number_to_currency(item.send(attribute_name(params)).to_f, :format => "<span class='currency_show_symbol'>%u</span><span class='currency_show_value'>%n</span>")
@@ -254,6 +255,7 @@ module Autocrud
             when 'boolean' then item.send(attribute_name(params)) ? t('true') : t('false')
             when 'custom' then send(@singular.underscore+"_"+column.to_s+"_show_value".to_s, item)
             when 'date' then item.send(attribute_name(params)) ? item.send(attribute_name(params)).strftime("%d-%m-%Y") : ""
+            when 'time' then item.send(attribute_name(params)) ? item.send(attribute_name(params)).strftime("%H:%M") : ""
             when 'datetime' then item.send(attribute_name(params)) ? l(item.send(attribute_name(params))) : ""
             when 'paperclip' then item.send(column.to_s+'?') ? image_tag(item.send(column.to_s, param(params, :size))) : "-"
             when 'currency' then number_to_currency(item.send(attribute_name(params)).to_f, :format => "<span class='currency_show_symbol'>%u</span><span class='currency_show_value'>%n</span>")
@@ -282,82 +284,6 @@ module Autocrud
       #
       def display_link_to?(action)
         @display_link.include?(action)
-      end
-      
-      #
-      # Creates a YUI button of the given name using a URL
-      # created by the set of options. See the valid options
-      # in the documentation for url_for. 
-      #
-      def crud_link_to(name, options = {}, html_options = nil)
-        # content_tag("span",
-        #   content_tag("span",
-            link_to(name, options, html_options)
-        #     ,
-        #     :class => 'first-child'),
-        #   :class => (html_options && html_options.include?(:class) ? html_options[:class] + " " : "") + "yui-button yui-link-button",
-        #   :onmouseover => 'this.className = this.className + " yui-button-hover yui-link-button-hover"',
-        #   :onmouseout => 'this.className = this.className.replace(/ yui-button-hover yui-link-button-hover/,"")',
-        #   :id => (html_options && html_options.include?(:id) ? "crud_link_to_" + html_options[:id] : nil)
-        # )
-      end
-      
-      #
-      # Creates a YUI button to a remote action defined by
-      # options[:url] (using the url_for format) that‘s
-      # called in the background using XMLHttpRequest.
-      #
-      # The result of that request can then be inserted into
-      # a DOM object whose id can be specified with options[:update].
-      # Usually, the result would be a partial prepared by
-      # the controller with render :partial.
-      #
-      def crud_link_to_remote(name, options = {}, html_options = nil)
-        # content_tag("span",
-        #   content_tag("span",
-            link_to_remote(name, options, html_options)#,
-          #   :class => 'first-child'),
-          # :class => (html_options && html_options.include?(:class) ? html_options[:class] + " " : "") + "yui-button yui-link-button",
-          # :onmouseover => 'this.className = this.className + " yui-button-hover yui-link-button-hover"',
-          # :onmouseout => 'this.className = this.className.replace(/ yui-button-hover yui-link-button-hover/,"")',
-          # :id => (html_options && html_options.include?(:id) ? "crud_link_to_remote_" + html_options[:id] : nil)
-        # )
-      end
-      
-      #
-      # Creates a YUI submit button with the text value as the caption.
-      #
-      def crud_submit_tag(value = "Save changes", options = {})
-        submit_tag(value, options)
-        # options.stringify_keys!
-        # 
-        # if disable_with = options.delete("disable_with")
-        #   disable_with = "this.value='#{disable_with}'"
-        #   disable_with << ";#{options.delete('onclick')}" if options['onclick']
-        #   
-        #   options["onclick"]  = "if (window.hiddenCommit) { window.hiddenCommit.setAttribute('value', this.value); }"
-        #   options["onclick"] << "else { hiddenCommit = document.createElement('input');hiddenCommit.type = 'hidden';"
-        #   options["onclick"] << "hiddenCommit.value = this.value;hiddenCommit.name = this.name;this.form.appendChild(hiddenCommit); }"
-        #   options["onclick"] << "this.setAttribute('originalValue', this.value);this.disabled = true;#{disable_with};"
-        #   options["onclick"] << "result = (this.form.onsubmit ? (this.form.onsubmit() ? this.form.submit() : false) : this.form.submit());"
-        #   options["onclick"] << "if (result == false) { this.value = this.getAttribute('originalValue');this.disabled = false; }return result;"
-        # end
-        # 
-        # if confirm = options.delete("confirm")
-        #   options["onclick"] ||= 'return true;'
-        #   options["onclick"] = "if (!#{confirm_javascript_function(confirm)}) return false; #{options['onclick']}"
-        # end
-        # 
-        # options["type"] = "submit"
-        # 
-        # content_tag("span",
-        #   content_tag("span",
-        #     content_tag("button", value, options.stringify_keys),
-        #     :class => 'first-child'),
-        #   :class => "yui-button yui-submit-button",
-        #   :onmouseover => 'this.className = "yui-button yui-submit-button yui-button-hover yui-submit-button-hover"',
-        #   :onmouseout => 'this.className = "yui-button yui-submit-button"'
-        # )
       end
       
       #
@@ -410,6 +336,7 @@ module Autocrud
           when :currency then number_to_currency(0, :format => "%u") + "&nbsp;".html_safe + locals[:f].text_field(column[:name], :class => 'in_currency', :style => 'text-align: right', :value => number_to_currency(@item.send(column[:name]).to_f, :separator => ".", :delimiter => "", :format => "%n"))
           when :custom then send("input_for_#{@singular.underscore}_#{column[:name].to_s}", locals[:f], item)
           when :date then locals[:f].date_select(column[:name], param(column, :options, {}),{ :class => 'in_date' })
+          when :time then locals[:f].time_select(column[:name], param(column, :options, {}),{ :class => 'in_time' })
           when :datetime then locals[:f].datetime_select(column[:name], :minute_step => 15, :class => 'in_datetime')
           when :file then locals[:f].file_field(column[:name], :class => 'in_file')
           when :hidden then locals[:f].hidden_field(column[:name], param(column, :params, { }).merge({:class => 'in_hidden'}))

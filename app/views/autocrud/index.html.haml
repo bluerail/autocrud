@@ -19,7 +19,7 @@
 
 .action_links
   - if display_link_to?(:new)
-    = crud_link_to t(@i18n_prefix+'.new'), { :action => 'new' }
+    = link_to t(@i18n_prefix+'.new'), { :action => 'new' }
 
   - if @list_options.include?(:append_generic_action) && @list_options[:append_generic_action].is_a?(Array) 
     - @list_options[:append_generic_action].each do |generic_action|
