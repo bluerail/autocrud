@@ -366,7 +366,7 @@ module Autocrud
               )
           when :password then locals[:f].password_field(column[:name], :class => 'in_password')
           when :select then locals[:f].select(column[:name].to_s, param(column,:select).collect {|element| element.is_a?(Array) && element.length == 2 ? element : [element.to_s, element.to_s]}, { :include_blank => true }.merge(param(column, :params, {})), param(column, :params, {}))
-          when :textarea then locals[:f].text_area(column[:name], param(column, :params, { }).merge({:class => 'in_textarea'}))
+          when :textarea then locals[:f].text_area(column[:name], {:class => 'in_textarea'}.merge(param(column, :params, { })))
           else
             locals[:f].text_field(column[:name], param(column, :params, { }).merge({:class => 'in_' + type}))
           end
