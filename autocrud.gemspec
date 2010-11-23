@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{autocrud}
-  s.version = "3.0.6"
+  s.version = "3.0.7"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["LICO Innovations"]
-  s.date = %q{2010-11-22}
+  s.date = %q{2010-11-23}
   s.description = %q{Rails plugin for the automation of CRUD tasks}
   s.email = %q{info@lico.nl}
   s.extra_rdoc_files = [
