@@ -414,8 +414,9 @@ module Autocrud
       #
       # 1) Controller.view_paths
       # 2) Custom locations (@see append_view_path)
-      # 3) lico_aud_crud view paths
-      # 4) built-in render method
+      # 3) Application-specific autocrud views (app/views/autocrud)
+      # 4) Autocrud gem builtin views
+      # 5) built-in render method
       #
       def render_crud_view(options = nil, locals = {}, &block)
         c = case self.class.to_s
@@ -439,6 +440,13 @@ module Autocrud
           crud_views_in(File.join(view_path, c.controller_path), options).each do |view|
             return render_crud_view_in(view, options, locals, &block)
           end
+        end
+       
+        #
+        # Try the applications global override (app/views/autocrud)
+        #
+        crud_views_in(@app_view_path, options).each do |view|
+          return render_crud_view_in(view, options, locals, &block)
         end
         
         #

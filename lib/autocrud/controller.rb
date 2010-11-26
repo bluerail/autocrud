@@ -98,6 +98,8 @@ module Autocrud
         set_crud_class(classname)
 
         @view_path = File.join(File.dirname(__FILE__), "..", "..", "app", "views", "autocrud")
+        @app_view_path = File.join(Rails.root.join('app','views','autocrud'))
+
         @custom_view_paths = []
         
         @create_options = { }
