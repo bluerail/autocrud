@@ -217,7 +217,7 @@ module Autocrud
             else class_exists?('Lico::AutoCrud::Types::' + type.classify) ? get_class('Lico::AutoCrud::Types::' + type.classify).to_list_value(item, attribute_name(params)) : (item_raw_value(item, params) || "")
           end
           if display_link_to?(:show)
-            return link_to(value, { :action => 'show', :id => item }, :class => 'dummy', :onclick => 'return crud_show(event,"' + url_for(:action => 'show', :id => item) + ', ' + item.id.to_s + '")')
+            return link_to(value, { :action => 'show', :id => item }, :class => 'dummy')
           else
             return value
           end
