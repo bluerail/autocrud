@@ -201,10 +201,12 @@ module Autocrud
 
         if column && item
           type = param(params,:type,(item.attributes.include?(column.to_s) ? item.column_for_attribute(column).type : "other").to_s).to_s
+          type = "other_record" if type == "other" && item.respond_to?(column.to_s + "_id")
           value = case type
             when 'string' then (item_raw_value(item, params) || "")
             when 'boolean' then item.send(attribute_name(params)) ? image_tag("/autocrud/images/tick.png", :alt => t('true'), :title => t('true')) : image_tag("/autocrud/images/cross.png", :alt => t('false'), :title => t('false'))
             when 'custom' then send(@singular.underscore+"_"+column.to_s+"_list_value".to_s, item)
+            when 'other_record' then item.send(column).to_s
             when 'date' then item.send(attribute_name(params)) ? item.send(attribute_name(params)).strftime("%d-%m-%Y") : ""
             when 'time' then item.send(attribute_name(params)) ? item.send(attribute_name(params)).strftime("%H:%M") : ""
             when 'datetime' then item.send(attribute_name(params)) ? l(item.send(attribute_name(params))) : ""
@@ -251,9 +253,11 @@ module Autocrud
 
         if column && item
           type = param(params,:type,(item.attributes.include?(column.to_s) ? item.column_for_attribute(column).type : "other").to_s).to_s
+          type = "other_record" if type == "other" && item.respond_to?(column.to_s + "_id")
           return case type
             when 'boolean' then item.send(attribute_name(params)) ? image_tag("/autocrud/images/tick.png", :alt => t('true'), :title => t('true')) : image_tag("/autocrud/images/cross.png", :alt => t('false'), :title => t('false'))
             when 'custom' then send(@singular.underscore+"_"+column.to_s+"_show_value".to_s, item)
+            when 'other_record' then item.send(column).to_s
             when 'date' then item.send(attribute_name(params)) ? item.send(attribute_name(params)).strftime("%d-%m-%Y") : ""
             when 'time' then item.send(attribute_name(params)) ? item.send(attribute_name(params)).strftime("%H:%M") : ""
             when 'datetime' then item.send(attribute_name(params)) ? l(item.send(attribute_name(params))) : ""
