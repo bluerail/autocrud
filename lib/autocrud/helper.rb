@@ -441,7 +441,7 @@ module Autocrud
         # Try custom view paths
         #
         @custom_view_paths.each do |view_path|
-          crud_views_in(File.join(view_path, c.controller_path), options).each do |view|
+          crud_views_in(view_path, options).each do |view|
             return render_crud_view_in(view, options, locals, &block)
           end
         end

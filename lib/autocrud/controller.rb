@@ -57,6 +57,7 @@ module Autocrud
       #
       def inherit_from(controller_class)
         inherit_object = controller_class.new
+        inherit_object.request = request
         inherit_object.class_eval do |c|
           require __FILE__
           include Autocrud::Controller::InstanceMethods
