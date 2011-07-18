@@ -11,7 +11,7 @@ begin
     gem.authors = ["LICO Innovations"]
     gem.files = Dir["*", "{lib}/**/*", "{app}/**/*", "{assets}/**/*"]
     # TODO: Shouldn't our Gemfile take care of this?
-    gem.add_dependency("haml", "~> 3.0.21")
+    gem.add_dependency("haml", "~> 3.1.2")
   end
   
   Jeweler::GemcutterTasks.new
