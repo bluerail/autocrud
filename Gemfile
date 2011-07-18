@@ -1,3 +1,3 @@
 source 'http://rubygems.org'
 
-gem 'haml', '~> 3.0.21'
+gem 'haml', '~> 3.1.2'
